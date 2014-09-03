@@ -156,6 +156,9 @@ void json_tokener_reset(struct json_tokener *tok)
   tok->err = json_tokener_success;
 }
 
+/*
+ * @brief get a json_object from a json string
+ */
 struct json_object* json_tokener_parse(const char *str)
 {
     enum json_tokener_error jerr_ignored;

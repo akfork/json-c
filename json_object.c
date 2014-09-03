@@ -149,6 +149,9 @@ static int json_escape_str(struct printbuf *pb, char *str, int len)
 
 /* reference counting */
 
+/*
+ * @brief json object ref_count + 1
+ */
 extern struct json_object* json_object_get(struct json_object *jso)
 {
 	if (jso)
@@ -156,6 +159,9 @@ extern struct json_object* json_object_get(struct json_object *jso)
 	return jso;
 }
 
+/*
+ * @brief json object ref_count - 1 and if == 0, release the resources.
+ */
 int json_object_put(struct json_object *jso)
 {
 	if(jso)
@@ -206,6 +212,9 @@ static struct json_object* json_object_new(enum json_type o_type)
 
 /* type checking functions */
 
+/*
+ * @brief check whether jso is type or not
+ */
 int json_object_is_type(struct json_object *jso, enum json_type type)
 {
 	if (!jso)
@@ -213,6 +222,9 @@ int json_object_is_type(struct json_object *jso, enum json_type type)
 	return (jso->o_type == type);
 }
 
+/*
+ * @brief get the type of jso
+ */
 enum json_type json_object_get_type(struct json_object *jso)
 {
 	if (!jso)
@@ -290,7 +302,9 @@ const char* json_object_to_json_string_ext(struct json_object *jso, int flags)
 }
 
 /* backwards-compatible conversion to string */
-
+/*
+ * @brief convert a json object to a json string
+ */
 const char* json_object_to_json_string(struct json_object *jso)
 {
 	return json_object_to_json_string_ext(jso, JSON_C_TO_STRING_SPACED);
@@ -365,6 +379,9 @@ static void json_object_object_delete(struct json_object* jso)
 	json_object_generic_delete(jso);
 }
 
+/*
+ * @brief create an empty json_type_object type json object
+ */
 struct json_object* json_object_new_object(void)
 {
 	struct json_object *jso = json_object_new(json_type_object);
@@ -396,6 +413,9 @@ struct lh_table* json_object_get_object(struct json_object *jso)
 	}
 }
 
+/*
+ * @brief add an "key=val" to jso object
+ */
 void json_object_object_add(struct json_object* jso, const char *key,
 			    struct json_object *val)
 {
@@ -420,6 +440,9 @@ int json_object_object_length(struct json_object *jso)
 	return lh_table_length(jso->o.c_object);
 }
 
+/*
+ * @brief get an object from a json object according to the key name.
+ */
 struct json_object* json_object_object_get(struct json_object* jso, const char *key)
 {
 	struct json_object *result = NULL;
@@ -446,6 +469,9 @@ json_bool json_object_object_get_ex(struct json_object* jso, const char *key, st
 	}
 }
 
+/*
+ * @brief delete the key object from jso
+ */
 void json_object_object_del(struct json_object* jso, const char *key)
 {
 	lh_table_delete(jso->o.c_object, key);
@@ -465,6 +491,9 @@ static int json_object_boolean_to_json_string(struct json_object* jso,
 		return sprintbuf(pb, "false");
 }
 
+/*
+ * @brief create an empty json_type_boolean type json object
+ */
 struct json_object* json_object_new_boolean(json_bool b)
 {
 	struct json_object *jso = json_object_new(json_type_boolean);
@@ -475,6 +504,9 @@ struct json_object* json_object_new_boolean(json_bool b)
 	return jso;
 }
 
+/*
+ * @brief get boolean value from a json_object
+ */
 json_bool json_object_get_boolean(struct json_object *jso)
 {
 	if (!jso)
@@ -505,6 +537,9 @@ static int json_object_int_to_json_string(struct json_object* jso,
 	return sprintbuf(pb, "%"PRId64, jso->o.c_int64);
 }
 
+/*
+ * @brief create a json_type_int type json object
+ */
 struct json_object* json_object_new_int(int32_t i)
 {
 	struct json_object *jso = json_object_new(json_type_int);
@@ -515,6 +550,9 @@ struct json_object* json_object_new_int(int32_t i)
 	return jso;
 }
 
+/*
+ * @brief get int value from json object
+ */
 int32_t json_object_get_int(struct json_object *jso)
 {
   int64_t cint64;
@@ -554,6 +592,9 @@ int32_t json_object_get_int(struct json_object *jso)
   }
 }
 
+/*
+ * @brief create a json_type_int type int64_t data json object
+ */
 struct json_object* json_object_new_int64(int64_t i)
 {
 	struct json_object *jso = json_object_new(json_type_int);
@@ -564,6 +605,9 @@ struct json_object* json_object_new_int64(int64_t i)
 	return jso;
 }
 
+/*
+ * @brief get int64 value from json object
+ */
 int64_t json_object_get_int64(struct json_object *jso)
 {
 	int64_t cint;
@@ -860,6 +904,9 @@ static void json_object_array_delete(struct json_object* jso)
 	json_object_generic_delete(jso);
 }
 
+/*
+ * @brief create an empty json_type_array type json object
+ */
 struct json_object* json_object_new_array(void)
 {
 	struct json_object *jso = json_object_new(json_type_array);
@@ -871,6 +918,9 @@ struct json_object* json_object_new_array(void)
 	return jso;
 }
 
+/*
+ * @brief get json_type_array value from a json_object
+ */
 struct array_list* json_object_get_array(struct json_object *jso)
 {
 	if (!jso)
@@ -889,22 +939,34 @@ void json_object_array_sort(struct json_object *jso, int(*sort_fn)(const void *,
 	array_list_sort(jso->o.c_array, sort_fn);
 }
 
+/*
+ * @brief get the length of the json object array
+ */
 int json_object_array_length(struct json_object *jso)
 {
 	return array_list_length(jso->o.c_array);
 }
 
+/*
+ * @brief add an object to the end of jso json object array
+ */
 int json_object_array_add(struct json_object *jso,struct json_object *val)
 {
 	return array_list_add(jso->o.c_array, val);
 }
 
+/*
+ * @brief add / replace an object to jso according to idx
+ */
 int json_object_array_put_idx(struct json_object *jso, int idx,
 			      struct json_object *val)
 {
 	return array_list_put_idx(jso->o.c_array, idx, val);
 }
 
+/*
+ * @brief get the value of idx from jso object
+ */
 struct json_object* json_object_array_get_idx(struct json_object *jso,
 					      int idx)
 {
