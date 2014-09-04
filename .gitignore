@@ -53,3 +53,5 @@
 *.o
 /libjson-c.la
 /libjson.la
+.ptp*
+*DS*
