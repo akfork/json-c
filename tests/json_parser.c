@@ -96,11 +96,10 @@ void json_parse(json_object * jobj) {
 }
 
 int main() {
-	/*
-	char * string = "{\"sitename\" : \"joys of programming\", \"categories\" : [ \"c\" , [\"c++\" , \"c\" ], \"java\", \"PHP\" ]
-			, \"author-details\": {\"admin\": false, \"name\" : \"Joys of Programming\", \"Number of Posts\" : 10}}";
-			*/
-	char *string = "{\"name\" : \"joys of programming\"}";
+
+	char * string = "{\"sitename\" : \"joys of programming\", \"categories\" : [ \"c\" , [\"c++\" , \"c\" ], \"java\", \"PHP\" ], \"author-details\": {\"admin\": false, \"name\" : \"Joys of Programming\", \"Number of Posts\" : 10}}";
+
+	//char *string = "{\"name\" : \"joys of programming\"}";
 	printf("JSON string: %s\n", string);
 	json_object * jobj = json_tokener_parse(string);
 	json_parse( jobj);
